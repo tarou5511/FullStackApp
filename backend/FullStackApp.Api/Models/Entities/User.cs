@@ -1,3 +1,5 @@
+using System;
+
 namespace FullStackApp.Api.Models.Entities
 {
     public class User
@@ -6,7 +8,8 @@ namespace FullStackApp.Api.Models.Entities
         public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
     
 }
