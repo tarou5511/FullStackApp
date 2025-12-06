@@ -1,4 +1,6 @@
 using System;
+using FullStackApp.Api.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace FullStackApp.Api.Data;
 
