@@ -1,6 +1,8 @@
 using FullStackApp.Api.Services.Interfaces;
 using FullStackApp.Api.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using FullStackApp.Api.Models.DTOs;
 
 namespace FullStackApp.Api.Controllers
 {
@@ -9,9 +11,12 @@ namespace FullStackApp.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        private readonly IMapper _mapper;
+
+        public UsersController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
@@ -20,7 +25,8 @@ namespace FullStackApp.Api.Controllers
             try
             {
                 var user = await _userService.RegisterAsync(request.Username, request.Email, request.Password);
-                return CreatedAtAction(nameof(GetById),new{id = user.Id},user);
+                var dto = _mapper.Map<UserDto>(user);
+                return CreatedAtAction(nameof(GetById),new{id = dto.Id},dto);
             }catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
@@ -35,14 +41,17 @@ namespace FullStackApp.Api.Controllers
             {
                 return NotFound();
             }
-            return Ok(user);
+        
+            var dto = _mapper.Map<UserDto>(user);
+            return Ok(dto);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var users = await _userService.GetAllUsersAsync();
-            return Ok(users);
+            var dto = _mapper.Map<IEnumerable<UserDto>>(users);
+            return Ok(dto);
         }
     }
 }

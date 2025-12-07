@@ -18,8 +18,8 @@ public class UserService : IUserService
 
     public async Task<User> RegisterAsync(string username, string email, string password)
     {
-        var ecistingUser = _userRepository.GetByEmailAsync(email);
-        if (ecistingUser != null)
+        var existingUser = await _userRepository.GetByEmailAsync(email);
+        if (existingUser != null)
         {
             throw new Exception("Email is already registered.");
         }
